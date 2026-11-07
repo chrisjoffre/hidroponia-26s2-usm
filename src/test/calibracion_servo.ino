@@ -1,3 +1,5 @@
+//h: abrir (horario).    a: cerrar (antihorario)
+
 #include <OneWire.h>
 #include <DallasTemperature.h>
 #include <Servo.h>
