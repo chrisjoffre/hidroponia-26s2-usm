@@ -1,0 +1,96 @@
+\documentclass[11pt,a4paper]{article}
+
+% --- Codificación y idioma ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+
+% --- Paquetes generales ---
+\usepackage{geometry}
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+
+% --- Estilo para código Arduino ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0.0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{arduinostyle}{
+  backgroundcolor=\color{backcolour},
+  commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=5pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2
+}
+\lstset{style=arduinostyle}
+
+% --- Título ---
+\title{\textbf{Informe de Avances: Torre Hidropónica Automatizada}\\
+\large Proyecto Inicial (IWG400) -- Universidad Técnica Federico Santa María}
+\author{\textbf{Grupo de Trabajo:} Ingeniería Civil Electrónica}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Este documento sintetiza el estado de avance del proyecto de automatización para agricultura familiar en el Valle del Aconcagua y zonas de escasez hídrica. Se presenta el diagnóstico territorial obtenido mediante entrevistas a usuarios y expertos, la formulación del desafío de innovación y el desarrollo técnico del prototipo 1.0 basado en una Torre Hidropónica con Arduino UNO R4 WiFi.
+\end{abstract}
+
+\section{Etapa 1: Empatizar y Contexto Territorial}
+La Región de Valparaíso y el Norte Chico enfrentan una profunda crisis por la megasequía, caracterizada por una severa disparidad hídrica entre la agroindustria de exportación y la agricultura familiar campesina. A través de entrevistas semiestructuradas a actores del territorio (Panquehue, San Felipe y Tilama), se identificó que las principales barreras de adopción tecnológica son el alto costo inicial, la falta de electricidad estable en zonas rurales alejadas y la complejidad de mantenimiento.
+
+\section{Etapa 2: Definir el Desafío}
+A partir de la información recopilada, el equipo definió el siguiente desafío de innovación:
+\begin{quote}
+\textbf{¿Cómo podríamos} diseñar un sistema de control de cultivo e irrigación automatizado, robusto y de bajo costo, que funcione de manera sencilla e independiente para proteger la producción de los pequeños agricultores rurales frente a la escasez hídrica?
+\end{quote}
+
+\section{Etapa 3: Idear y Propuesta de Solución}
+Tras explorar múltiples alternativas (riego por goteo, nebulización, malla sombra), se seleccionó el desarrollo de una \textbf{Torre Hidropónica Automatizada}. Esta solución maximiza la eficiencia hídrica al recircular el agua en un circuito cerrado sin pérdida por infiltración en suelo, permitiendo además el control activo del microclima (temperatura y sombreado).
+
+\section{Etapa 4: Prototipar (Desarrollo Técnico 1.0)}
+El prototipo funcional se implementó sobre la plataforma \textbf{Arduino UNO R4 WiFi}. La arquitectura incluye:
+\begin{itemize}
+  \item \textbf{Sensores de Temperatura:} Dos sensores impermeables DS18B20 para monitoreo continuo de la temperatura ambiental del aire (Pin 2) y la temperatura del estanque de agua (Pin 3).
+  \item \textbf{Control de Malla de Sombra:} Servo motor de rotación continua (Pin 9) que despliega la malla UV cuando la temperatura del aire supera los $27\,^\circ\mathrm{C}$ y la abre al descender a $24\,^\circ\mathrm{C}$ (control con histéresis).
+  \item \textbf{Ciclo de Riego Eficiente:} Control de bomba sumergible mediante relé de 5\,V (Pin 7) en ciclos no bloqueantes ($15\,\mathrm{s}$ activada / $60\,\mathrm{s}$ desactivada).
+  \item \textbf{Interfaz de Usuario y Telemetría:} Visualización local en pantalla OLED I2C de $0{,}96''$ (SSD1306) y comandos de calibración/monitoreo por puerto serie a 115200 baudios.
+\end{itemize}
+
+\subsection{Lógica de Control en Arduino}
+Se estructuró el código mediante estados finitos y tiempos no bloqueantes (\texttt{millis()}) para garantizar lecturas continuas sin pausar la ejecución del sistema:
+
+\begin{lstlisting}[language=C++]
+// Fragmento del ciclo principal de control (Arduino UNO R4 WiFi)
+void loop() {
+  leerSensores();       // Mide temperatura de aire y agua
+  actualizarServo();    // Controla apertura/cierre de malla UV
+  controlBomba();       // Maneja el ciclo ON/OFF de la bomba
+  actualizarPantalla(); // Refresca pantalla OLED SSD1306
+  leerSerial();         // Recibe comandos de calibracion manual
+}
+\end{lstlisting}
+
+\section{Etapa 5: Plan de Testeo y Próximos Pasos}
+El plan de testeo evaluará la autonomía del sistema frente a cortes de energía (integrando respaldo por panel solar), la claridad de las alertas en la pantalla OLED para usuarios rurales y la estabilidad térmica del estanque para asegurar la salud radicular del cultivo.
+
+\end{document}
