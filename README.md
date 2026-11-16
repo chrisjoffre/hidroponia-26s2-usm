@@ -1,12 +1,14 @@
 # hidroponia-26s2-usm
 
+Avances 16/11: src y docs/latex.
+En el apartado src tenemos dos archivos el main, codigo principal, y el archivo donde hicimos pruebas previas.
 
 # Sistema de cultivo hidropónico automatizado
 
 Proyecto inicial de ingenieria civil electrónica utfsm, (PENDIENTE: su propósito y las funcionalidades principales).
 Fecha de inicio: Noviembre 2026
 
-## 👥 Equipo de desarrollo
+## Equipo de desarrollo
 
 - Gabriel Hevia
 - Christian Jofré
